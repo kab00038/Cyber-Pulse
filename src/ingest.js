@@ -14,7 +14,7 @@ const cleanText = (input = "") => {
   // Remove HTML tags safely to prevent regex DoS
   let text = String(input || "");
   text = text.replace(/<[^<>]*>/g, " ");
-  text = text.replace(/\s+/g, " ");
+  text = text.replaceAll(/\s+/g, " ");
   return text.trim();
 };
 

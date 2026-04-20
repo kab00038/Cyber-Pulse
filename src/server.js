@@ -36,14 +36,14 @@ app.use((req, res, next) => {
 });
 
 // CORS Configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map(o => o.trim())
+  : ["http://localhost:4000", "http://localhost:3000"];
+
 app.use((req, res, next) => {
-  const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(",")
-    : ["http://localhost:4000", "http://localhost:3000"];
-  
   const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin) || !NODE_ENV.includes("production")) {
-    res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   }
@@ -76,15 +76,15 @@ app.use(express.static(path.join(__dirname, "../public"), { index: false }));
 
 // Input Validation Helpers
 function validateInteger(value, min = 0, max = 120) {
-  const num = parseInt(value, 10);
-  if (isNaN(num)) return min;
+  const num = Number.parseInt(value, 10);
+  if (Number.isNaN(num)) return min;
   return Math.max(min, Math.min(max, num));
 }
 
 function validateDateString(value) {
   if (!value) return "";
   const date = new Date(value);
-  if (isNaN(date.getTime())) return "";
+  if (Number.isNaN(date.getTime())) return "";
   return date.toISOString().split("T")[0];
 }
 
