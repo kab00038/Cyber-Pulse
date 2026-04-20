@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - CVEs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="cves">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/threat-intel">Threat Intel</a>
+        <a href="/cves" aria-current="page">CVEs</a>
+        <a href="/kev">Exploit Watch</a>
+        <a href="/forecast">Forecast</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshCvesButton" class="refresh-btn">Refresh CVEs</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="panel page-hero">
+        <div>
+          <p class="kicker">VULNERABILITY WATCH</p>
+          <h1>Recent Critical CVEs</h1>
+          <p class="subtitle">Top recent vulnerabilities ranked by severity and affected scope. The score emphasizes criticality and breadth of vulnerable products.</p>
+        </div>
+        <div class="cve-summary-strip">
+          <div class="summary-chip">
+            <span>Window</span>
+            <strong>Last 14 days</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Source</span>
+            <strong>NVD API</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Sorted by</span>
+            <strong>Impact score</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel cve-panel">
+        <div class="section-header">
+          <div>
+            <p class="kicker">Criticality</p>
+            <h2>Top 10 vulnerabilities</h2>
+          </div>
+          <span class="section-badge" id="cveStatus">Loading...</span>
+        </div>
+        <div id="cveList" class="cve-list"></div>
+      </section>
+    </main>
+
+    <template id="cveTemplate">
+      <article class="cve-card">
+        <div class="cve-head">
+          <div>
+            <span class="cve-id"></span>
+            <h3></h3>
+          </div>
+          <span class="severity-pill"></span>
+        </div>
+        <p class="cve-summary"></p>
+        <div class="cve-meta">
+          <span class="cve-score"></span>
+          <span class="cve-affected"></span>
+          <span class="cve-date"></span>
+        </div>
+        <button class="framework-btn" type="button">Map to OWASP + MITRE</button>
+        <section class="framework-result" hidden></section>
+        <div class="cve-links"></div>
+      </article>
+    </template>
+
+    <script src="/cves.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - Cyber Forecast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="forecast">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/threat-intel">Threat Intel</a>
+        <a href="/cves">CVEs</a>
+        <a href="/kev">Exploit Watch</a>
+        <a href="/forecast" aria-current="page">Forecast</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshForecastButton" class="refresh-btn">Refresh Forecast</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="panel page-hero">
+        <div>
+          <p class="kicker">CYBER WEATHER MODEL</p>
+          <h1>Anticipated Threat Forecast</h1>
+          <p class="subtitle">A short-horizon threat weather view using recent intelligence, KEV due-date pressure, and critical vulnerability activity.</p>
+        </div>
+        <div class="cve-summary-strip">
+          <div class="summary-chip">
+            <span>Forecast window</span>
+            <strong id="forecastWindow">--</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Overall risk</span>
+            <strong id="forecastRisk">--</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Generated</span>
+            <strong id="forecastGenerated">--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="forecast-grid">
+        <section class="panel forecast-main">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Conditions</p>
+              <h2>Threat Weather</h2>
+            </div>
+            <span class="section-badge" id="forecastStatus">Loading...</span>
+          </div>
+          <div class="forecast-hero">
+            <strong id="forecastLevel" class="forecast-level">--</strong>
+            <p id="forecastHeadline" class="forecast-headline"></p>
+          </div>
+          <div id="outlookList" class="outlook-list"></div>
+        </section>
+
+        <section class="panel forecast-side">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Actor signals</p>
+              <h2>APT Activity Watch</h2>
+            </div>
+          </div>
+          <div id="aptList" class="apt-list"></div>
+        </section>
+      </section>
+
+      <section class="panel forecast-indicators">
+        <div class="section-header">
+          <div>
+            <p class="kicker">Indicators</p>
+            <h2>Inputs driving this forecast</h2>
+          </div>
+        </div>
+        <div id="indicatorGrid" class="dashboard-grid"></div>
+      </section>
+    </main>
+
+    <script src="/forecast.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="dashboard">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard" aria-current="page">Dashboard</a>
+        <a href="/threat-intel">Threat Intel</a>
+        <a href="/cves">CVEs</a>
+        <a href="/kev">Exploit Watch</a>
+        <a href="/forecast">Forecast</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshButton" class="refresh-btn">Refresh</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero-panel panel dashboard-hero">
+        <div>
+          <p class="kicker">SHADOW / SURFACE MONITORING</p>
+          <h1>Cyber Threat Dashboard</h1>
+          <p class="subtitle">A compact command-view for current activity, archive depth, source coverage, and recent high-signal reporting.</p>
+        </div>
+        <div class="hero-search">
+          <label for="searchInput">Search intelligence</label>
+          <input id="searchInput" type="search" placeholder="Search titles, sources, or themes" />
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+        <section class="panel metric-panel">
+          <span class="metric-label">Active sources</span>
+          <strong id="metricSources" class="metric-value">--</strong>
+          <span class="metric-note">Tracked feeds in archive</span>
+        </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">Archive days</span>
+          <strong id="metricDays" class="metric-value">--</strong>
+          <span class="metric-note">Unique daily buckets</span>
+        </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">Recent stories</span>
+          <strong id="metricStories" class="metric-value">--</strong>
+          <span class="metric-note">Latest live articles loaded</span>
+        </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">UTC clock</span>
+          <strong id="utcClock" class="metric-value">--:--:--</strong>
+          <span class="metric-note">Synchronised time</span>
+        </section>
+      </section>
+
+      <section class="dashboard-grid dashboard-grid-wide">
+        <section class="panel dashboard-card">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Coverage</p>
+              <h2>Source Distribution</h2>
+            </div>
+            <span class="section-badge">Archive mix</span>
+          </div>
+          <div id="sourceBars" class="bar-list"></div>
+        </section>
+
+        <section class="panel dashboard-card">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Burst</p>
+              <h2>Daily Activity</h2>
+            </div>
+            <span class="section-badge">30 day view</span>
+          </div>
+          <div id="dayBars" class="bar-list bar-list-dense"></div>
+        </section>
+      </section>
+
+      <section class="panel dashboard-card">
+        <div class="section-header">
+          <div>
+            <p class="kicker">Intel</p>
+            <h2>Recent high-signal reports</h2>
+          </div>
+          <span class="section-badge" id="dashboardStatus">Loading...</span>
+        </div>
+        <div id="dashboardFeed" class="dashboard-feed"></div>
+      </section>
+    </main>
+
+    <template id="dashboardCardTemplate">
+      <article class="dashboard-feed-card">
+        <div class="card-head">
+          <span class="source-pill"></span>
+          <time></time>
+        </div>
+        <h3></h3>
+        <p></p>
+        <a target="_blank" rel="noopener noreferrer">Read report</a>
+      </article>
+    </template>
+
+    <script src="/dashboard.js" type="module"></script>
+  </body>
+</html>

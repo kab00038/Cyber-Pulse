@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - Exploit Watch / KEV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="kev">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/threat-intel">Threat Intel</a>
+        <a href="/cves">CVEs</a>
+        <a href="/kev" aria-current="page">Exploit Watch</a>
+        <a href="/forecast">Forecast</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshKevButton" class="refresh-btn">Refresh KEV</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="panel page-hero">
+        <div>
+          <p class="kicker">KNOWN EXPLOITED VULNERABILITIES</p>
+          <h1>Exploit Watch / KEV</h1>
+          <p class="subtitle">A focused view of vulnerabilities confirmed as actively exploited, scoped to this year and last year with due dates that are upcoming or recently overdue.</p>
+        </div>
+        <div class="cve-summary-strip">
+          <div class="summary-chip">
+            <span>Total KEV</span>
+            <strong id="kevTotal">--</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Overdue</span>
+            <strong id="kevOverdue">--</strong>
+          </div>
+          <div class="summary-chip">
+            <span>Due in 30d</span>
+            <strong id="kevDueSoon">--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel kev-panel">
+        <div class="section-header">
+          <div>
+            <p class="kicker">Exploit pressure</p>
+            <h2>Top KEV items</h2>
+          </div>
+          <span class="section-badge" id="kevStatus">Loading...</span>
+        </div>
+        <div id="kevList" class="kev-list"></div>
+      </section>
+    </main>
+
+    <template id="kevTemplate">
+      <article class="kev-card">
+        <div class="kev-head">
+          <div>
+            <span class="kev-id"></span>
+            <h3></h3>
+          </div>
+          <span class="kev-chip"></span>
+        </div>
+        <p class="kev-summary"></p>
+        <div class="kev-meta"></div>
+        <div class="kev-action"></div>
+      </article>
+    </template>
+
+    <script src="/kev.js" type="module"></script>
+  </body>
+</html>

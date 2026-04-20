@@ -1,0 +1,21 @@
+{
+  "name": "cyberpulse-news",
+  "version": "1.0.0",
+  "description": "Lightweight cybersecurity news aggregator with historical archive",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "ingest": "node src/ingest.js",
+    "start:service": "node scripts/service.mjs start",
+    "stop:service": "node scripts/service.mjs stop",
+    "restart:service": "node scripts/service.mjs restart",
+    "status:service": "node scripts/service.mjs status",
+    "logs:service": "tail -n 100 -f .service/cyberpulse.log"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2",
+    "rss-parser": "^3.13.0"
+  }
+}
