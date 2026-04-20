@@ -17,6 +17,9 @@ const PORT = process.env.PORT || 4000;
 const INGEST_INTERVAL_MS = 30 * 60 * 1000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 
+// Disable version disclosure
+app.disable("x-powered-by");
+
 // Security Headers Middleware
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");

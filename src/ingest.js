@@ -10,11 +10,13 @@ const insertStmt = db.prepare(`
   VALUES (@source, @title, @link, @summary, @published_at, @ingested_at)
 `);
 
-const cleanText = (input = "") =>
-  input
-    .replace(/<[^>]*>/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+const cleanText = (input = "") => {
+  // Remove HTML tags safely to prevent regex DoS
+  let text = String(input || "");
+  text = text.replace(/<[^<>]*>/g, " ");
+  text = text.replace(/\s+/g, " ");
+  return text.trim();
+};
 
 export async function ingestAll() {
   const now = new Date().toISOString();
