@@ -61,7 +61,8 @@ function buildAptActivity(newsItems) {
   const results = [];
 
   for (const group of APT_GROUPS) {
-    const rx = new RegExp(String.raw`\b${group.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")}\b`, "i");
+    const escapedGroup = group.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+    const rx = new RegExp(String.raw`\b${escapedGroup}\b`, "i");
     const matches = newsItems.filter((item) => rx.test(`${item.title} ${item.summary}`));
 
     if (!matches.length) continue;

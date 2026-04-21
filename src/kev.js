@@ -27,7 +27,7 @@ function buildUrgencyScore(daysLeft, vendorProject, product) {
 }
 
 function normalizeText(value) {
-  return String(value || "").replace(/\s+/g, " ").trim();
+  return String(value || "").replaceAll(/\s+/g, " ").trim();
 }
 
 function isRecentYear(dateString) {
