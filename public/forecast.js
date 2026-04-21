@@ -120,11 +120,9 @@ refreshForecastButton.addEventListener("click", () => {
   });
 });
 
-(async () => {
-  try {
-    await loadForecast();
-  } catch (error) {
-    forecastStatus.textContent = "Failed to load";
-    console.error(error);
-  }
-})();
+try {
+  await loadForecast();
+} catch (error) {
+  forecastStatus.textContent = "Failed to load";
+  console.error(error);
+}

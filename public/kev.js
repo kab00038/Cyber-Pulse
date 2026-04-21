@@ -51,7 +51,13 @@ function renderKev(items) {
 
     const chip = fragment.querySelector(".kev-chip");
     chip.textContent = item.daysLeft !== null ? `${item.daysLeft}d` : "N/A";
-    chip.classList.add(item.daysLeft !== null && item.daysLeft < 0 ? "kev-chip-overdue" : item.daysLeft !== null && item.daysLeft <= 30 ? "kev-chip-soon" : "kev-chip-neutral");
+    let chipClass = "kev-chip-neutral";
+    if (item.daysLeft !== null && item.daysLeft < 0) {
+      chipClass = "kev-chip-overdue";
+    } else if (item.daysLeft !== null && item.daysLeft <= 30) {
+      chipClass = "kev-chip-soon";
+    }
+    chip.classList.add(chipClass);
 
     kevList.appendChild(fragment);
   }
@@ -89,7 +95,9 @@ refreshKevButton.addEventListener("click", () => {
   });
 });
 
-loadKev().catch((error) => {
+try {
+  await loadKev();
+} catch (error) {
   kevStatus.textContent = "Failed to load KEV";
   console.error(error);
-});
+}

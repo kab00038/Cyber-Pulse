@@ -102,10 +102,12 @@ async function refreshFeed() {
 applyFilters.addEventListener("click", loadNews);
 refreshButton.addEventListener("click", refreshFeed);
 
-Promise.all([loadMeta(), loadNews()]).catch((error) => {
+try {
+  await Promise.all([loadMeta(), loadNews()]);
+} catch (error) {
   statusText.textContent = "Failed to load feed";
   console.error(error);
-});
+}
 
 updateUtcClock();
 setInterval(updateUtcClock, 1000);

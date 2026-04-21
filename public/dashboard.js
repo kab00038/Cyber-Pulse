@@ -124,11 +124,9 @@ refreshButton.addEventListener("click", refreshDashboard);
 updateUtcClock();
 setInterval(updateUtcClock, 1000);
 
-(async () => {
-  try {
-    await loadDashboard();
-  } catch (error) {
-    dashboardStatus.textContent = "Failed to load dashboard";
-    console.error(error);
-  }
-})();
+try {
+  await loadDashboard();
+} catch (error) {
+  dashboardStatus.textContent = "Failed to load dashboard";
+  console.error(error);
+}

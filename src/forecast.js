@@ -43,7 +43,7 @@ const recentNewsStmt = db.prepare(`
 `);
 
 function compact(text) {
-  return String(text || "").replace(/\s+/g, " ").trim();
+  return String(text || "").replaceAll(/\s+/g, " ").trim();
 }
 
 function classifyRisk(score) {
@@ -61,7 +61,7 @@ function buildAptActivity(newsItems) {
   const results = [];
 
   for (const group of APT_GROUPS) {
-    const rx = new RegExp(`\\b${group.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}\\b`, "i");
+    const rx = new RegExp(String.raw`\b${group.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")}\b`, "i");
     const matches = newsItems.filter((item) => rx.test(`${item.title} ${item.summary}`));
 
     if (!matches.length) continue;
@@ -70,11 +70,30 @@ function buildAptActivity(newsItems) {
       group,
       mentions: matches.length,
       latest: matches[0]?.publishedAt || null,
-      confidence: matches.length >= 4 ? "high" : matches.length >= 2 ? "medium" : "low"
+      confidence: classifyConfidence(matches.length)
     });
   }
 
-  return results.sort((a, b) => b.mentions - a.mentions).slice(0, 8);
+  return results.toSorted((a, b) => b.mentions - a.mentions).slice(0, 8);
+}
+
+function classifyConfidence(matchCount) {
+  if (matchCount >= 4) return "high";
+  if (matchCount >= 2) return "medium";
+  return "low";
+}
+
+function weatherHeadline(score) {
+  if (score >= 78) {
+    return "Storm conditions likely: active exploitation and elevated operational risk.";
+  }
+  if (score >= 62) {
+    return "Elevated conditions: prioritize patching and external exposure reduction.";
+  }
+  if (score >= 45) {
+    return "Guarded conditions: monitor key advisories and tighten detections.";
+  }
+  return "Low pressure: maintain baseline hardening and watchlist monitoring.";
 }
 
 function buildThreatOutlook(newsItems, kev, cves) {
@@ -119,14 +138,7 @@ export async function fetchForecast() {
     weather: {
       score: weatherScore,
       level: classifyRisk(weatherScore),
-      headline:
-        weatherScore >= 78
-          ? "Storm conditions likely: active exploitation and elevated operational risk."
-          : weatherScore >= 62
-            ? "Elevated conditions: prioritize patching and external exposure reduction."
-            : weatherScore >= 45
-              ? "Guarded conditions: monitor key advisories and tighten detections."
-              : "Low pressure: maintain baseline hardening and watchlist monitoring."
+      headline: weatherHeadline(weatherScore)
     },
     aptActivity: buildAptActivity(newsItems),
     threatOutlook: buildThreatOutlook(newsItems, kev, cves),

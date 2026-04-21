@@ -1,5 +1,5 @@
 import Parser from "rss-parser";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import db from "./db.js";
 import { SOURCES } from "./sources.js";
 
@@ -13,7 +13,7 @@ const insertStmt = db.prepare(`
 const cleanText = (input = "") => {
   // Remove HTML tags safely to prevent regex DoS
   let text = String(input || "");
-  text = text.replace(/<[^<>]*>/g, " ");
+  text = text.replaceAll(/<[^<>]*>/g, " ");
   text = text.replaceAll(/\s+/g, " ");
   return text.trim();
 };
@@ -56,14 +56,13 @@ const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === proces
 
 if (isDirectRun) {
   const start = Date.now();
-  ingestAll()
-    .then((stats) => {
-      const duration = Date.now() - start;
-      console.log(JSON.stringify({ durationMs: duration, stats }, null, 2));
-      process.exit(0);
-    })
-    .catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
+  try {
+    const stats = await ingestAll();
+    const duration = Date.now() - start;
+    console.log(JSON.stringify({ durationMs: duration, stats }, null, 2));
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 }

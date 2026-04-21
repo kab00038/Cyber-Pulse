@@ -174,11 +174,9 @@ cveList.addEventListener("click", (event) => {
   mapCard(card);
 });
 
-(async () => {
-  try {
-    await loadCves();
-  } catch (error) {
-    cveStatus.textContent = "Failed to load CVEs";
-    console.error(error);
-  }
-})();
+try {
+  await loadCves();
+} catch (error) {
+  cveStatus.textContent = "Failed to load CVEs";
+  console.error(error);
+}

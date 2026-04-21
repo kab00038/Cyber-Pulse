@@ -13,12 +13,12 @@ function getPublishedWindow() {
 
 function readDescription(cve) {
   const description = cve.descriptions?.find((item) => item.lang === "en")?.value || cve.descriptions?.[0]?.value || "";
-  return description.replace(/\s+/g, " ").trim();
+  return description.replaceAll(/\s+/g, " ").trim();
 }
 
 function getSeverityScore(cve) {
   const metric = cve.metrics?.cvssMetricV31?.[0] || cve.metrics?.cvssMetricV30?.[0] || cve.metrics?.cvssMetricV2?.[0];
-  const baseData = metric?.cvssData || metric?.cvssData || {};
+  const baseData = metric?.cvssData || {};
   const baseScore = Number(baseData.baseScore || 0);
   const severity = baseData.baseSeverity || metric?.baseSeverity || "UNKNOWN";
   return { baseScore, severity };

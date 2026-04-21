@@ -1,6 +1,6 @@
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import rateLimit from "express-rate-limit";
 import db from "./db.js";
 import { ingestAll } from "./ingest.js";

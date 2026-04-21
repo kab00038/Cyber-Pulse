@@ -375,20 +375,20 @@ a {
 .severity-critical {
   color: #ffcabf;
   border-color: rgba(255, 94, 69, 0.5);
-  background: rgba(255, 94, 69, 0.1);
+  background: #412017;
 }
 
 .severity-high {
   color: #ffe3a0;
   border-color: rgba(255, 209, 102, 0.38);
-  background: rgba(255, 209, 102, 0.08);
+  background: #3a2b11;
 }
 
 .severity-medium,
 .severity-low,
 .severity-unknown {
   color: #d5dde4;
-  background: rgba(255, 255, 255, 0.04);
+  background: #1c2630;
 }
 
 .cve-summary {
@@ -529,18 +529,18 @@ a {
 .kev-chip-overdue {
   color: #ffcabf;
   border-color: rgba(255, 94, 69, 0.5);
-  background: rgba(255, 94, 69, 0.1);
+  background: #412017;
 }
 
 .kev-chip-soon {
   color: #ffe3a0;
   border-color: rgba(255, 209, 102, 0.38);
-  background: rgba(255, 209, 102, 0.08);
+  background: #3a2b11;
 }
 
 .kev-chip-neutral {
   color: #d5dde4;
-  background: rgba(255, 255, 255, 0.04);
+  background: #1c2630;
 }
 
 .kev-summary {
@@ -674,21 +674,21 @@ a {
 .severity-high {
   color: #ffcabf;
   border-color: rgba(255, 94, 69, 0.5);
-  background: rgba(255, 94, 69, 0.1);
+  background: #412017;
 }
 
 .severity-elevated,
 .severity-medium {
   color: #ffe3a0;
   border-color: rgba(255, 209, 102, 0.38);
-  background: rgba(255, 209, 102, 0.08);
+  background: #3a2b11;
 }
 
 .severity-guarded,
 .severity-low,
 .severity-neutral {
   color: #d5dde4;
-  background: rgba(255, 255, 255, 0.04);
+  background: #1c2630;
 }
 
 .kicker {
