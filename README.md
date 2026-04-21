@@ -106,3 +106,5 @@ The KEV page pulls CISA's Known Exploited Vulnerabilities feed, scopes to entrie
 
 - This app uses RSS feeds and stores snapshots for historical browsing.
 - If a source changes feed format or URL, update `src/sources.js`.
+
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-dark.svg)](https://sonarcloud.io/summary/new_code?id=kab00038_Cyber-Pulse)
