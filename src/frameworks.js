@@ -51,61 +51,96 @@ const OWASP_TOP_10 = [
   }
 ];
 
-const MITRE_TACTICS = [
+const MITRE_TECHNIQUES = [
   {
-    id: "TA0001",
-    name: "Initial Access",
-    techniques: [
-      { id: "T1190", name: "Exploit Public-Facing Application", keywords: ["remote code execution", "rce", "public-facing", "exploit"] },
-      { id: "T1566", name: "Phishing", keywords: ["phishing", "malicious email"] },
-      { id: "T1133", name: "External Remote Services", keywords: ["vpn", "remote service", "rdp"] }
-    ]
+    tacticId: "TA0001",
+    tacticName: "Initial Access",
+    id: "T1190",
+    name: "Exploit Public-Facing Application",
+    keywords: ["remote code execution", "rce", "public-facing", "exploit"]
   },
   {
-    id: "TA0002",
-    name: "Execution",
-    techniques: [
-      { id: "T1059", name: "Command and Scripting Interpreter", keywords: ["command injection", "shell", "script execution", "powershell"] }
-    ]
+    tacticId: "TA0001",
+    tacticName: "Initial Access",
+    id: "T1566",
+    name: "Phishing",
+    keywords: ["phishing", "malicious email"]
   },
   {
-    id: "TA0004",
-    name: "Privilege Escalation",
-    techniques: [
-      { id: "T1068", name: "Exploitation for Privilege Escalation", keywords: ["privilege escalation", "elevation", "kernel exploit"] }
-    ]
+    tacticId: "TA0001",
+    tacticName: "Initial Access",
+    id: "T1133",
+    name: "External Remote Services",
+    keywords: ["vpn", "remote service", "rdp"]
   },
   {
-    id: "TA0006",
-    name: "Credential Access",
-    techniques: [
-      { id: "T1110", name: "Brute Force", keywords: ["brute force", "password spraying", "credential stuffing"] },
-      { id: "T1555", name: "Credentials from Password Stores", keywords: ["credential theft", "password store", "token theft"] }
-    ]
+    tacticId: "TA0002",
+    tacticName: "Execution",
+    id: "T1059",
+    name: "Command and Scripting Interpreter",
+    keywords: ["command injection", "shell", "script execution", "powershell"]
   },
   {
-    id: "TA0008",
-    name: "Lateral Movement",
-    techniques: [
-      { id: "T1021", name: "Remote Services", keywords: ["lateral movement", "remote services", "smb", "rdp"] }
-    ]
+    tacticId: "TA0004",
+    tacticName: "Privilege Escalation",
+    id: "T1068",
+    name: "Exploitation for Privilege Escalation",
+    keywords: ["privilege escalation", "elevation", "kernel exploit"]
   },
   {
-    id: "TA0010",
-    name: "Exfiltration",
-    techniques: [
-      { id: "T1041", name: "Exfiltration Over C2 Channel", keywords: ["data exfiltration", "exfiltrate", "data theft"] }
-    ]
+    tacticId: "TA0006",
+    tacticName: "Credential Access",
+    id: "T1110",
+    name: "Brute Force",
+    keywords: ["brute force", "password spraying", "credential stuffing"]
   },
   {
-    id: "TA0040",
-    name: "Impact",
-    techniques: [
-      { id: "T1486", name: "Data Encrypted for Impact", keywords: ["ransomware", "encrypt", "data encrypted"] },
-      { id: "T1499", name: "Endpoint Denial of Service", keywords: ["denial of service", "dos", "ddos"] }
-    ]
+    tacticId: "TA0006",
+    tacticName: "Credential Access",
+    id: "T1555",
+    name: "Credentials from Password Stores",
+    keywords: ["credential theft", "password store", "token theft"]
+  },
+  {
+    tacticId: "TA0008",
+    tacticName: "Lateral Movement",
+    id: "T1021",
+    name: "Remote Services",
+    keywords: ["lateral movement", "remote services", "smb", "rdp"]
+  },
+  {
+    tacticId: "TA0010",
+    tacticName: "Exfiltration",
+    id: "T1041",
+    name: "Exfiltration Over C2 Channel",
+    keywords: ["data exfiltration", "exfiltrate", "data theft"]
+  },
+  {
+    tacticId: "TA0040",
+    tacticName: "Impact",
+    id: "T1486",
+    name: "Data Encrypted for Impact",
+    keywords: ["ransomware", "encrypt", "data encrypted"]
+  },
+  {
+    tacticId: "TA0040",
+    tacticName: "Impact",
+    id: "T1499",
+    name: "Endpoint Denial of Service",
+    keywords: ["denial of service", "dos", "ddos"]
   }
 ];
+
+const MITRE_TACTICS = Array.from(
+  MITRE_TECHNIQUES.reduce((map, item) => {
+    if (!map.has(item.tacticId)) {
+      map.set(item.tacticId, { id: item.tacticId, name: item.tacticName, techniques: [] });
+    }
+
+    map.get(item.tacticId).techniques.push({ id: item.id, name: item.name, keywords: item.keywords });
+    return map;
+  }, new Map()).values()
+);
 
 function normalize(text) {
   return String(text || "").toLowerCase();

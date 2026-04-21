@@ -138,6 +138,17 @@ const dayQuery = db.prepare(`
   LIMIT 30
 `);
 
+function registerPageRoute(paths, fileName) {
+  app.get(paths, (_req, res) => {
+    res.sendFile(path.join(__dirname, `../public/${fileName}`), (err) => {
+      if (err) {
+        console.error(`Error sending ${fileName}:`, err);
+        res.status(404).json({ error: "Not found" });
+      }
+    });
+  });
+}
+
 app.get("/api/news", apiLimiter, (req, res) => {
   try {
     const limit = validateInteger(req.query.limit, 1, 120);
@@ -184,50 +195,11 @@ app.post("/api/refresh", refreshLimiter, async (req, res) => {
   }
 });
 
-app.get(["/", "/dashboard"], (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/dashboard.html"), (err) => {
-    if (err) {
-      console.error("Error sending dashboard.html:", err);
-      res.status(404).json({ error: "Not found" });
-    }
-  });
-});
-
-app.get(["/threat-intel", "/intel"], (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/index.html"), (err) => {
-    if (err) {
-      console.error("Error sending index.html:", err);
-      res.status(404).json({ error: "Not found" });
-    }
-  });
-});
-
-app.get(["/cves", "/vulnerabilities"], (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/cves.html"), (err) => {
-    if (err) {
-      console.error("Error sending cves.html:", err);
-      res.status(404).json({ error: "Not found" });
-    }
-  });
-});
-
-app.get(["/kev", "/exploit-watch"], (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/kev.html"), (err) => {
-    if (err) {
-      console.error("Error sending kev.html:", err);
-      res.status(404).json({ error: "Not found" });
-    }
-  });
-});
-
-app.get(["/forecast", "/weather"], (_req, res) => {
-  res.sendFile(path.join(__dirname, "../public/forecast.html"), (err) => {
-    if (err) {
-      console.error("Error sending forecast.html:", err);
-      res.status(404).json({ error: "Not found" });
-    }
-  });
-});
+registerPageRoute(["/", "/dashboard"], "dashboard.html");
+registerPageRoute(["/threat-intel", "/intel"], "index.html");
+registerPageRoute(["/cves", "/vulnerabilities"], "cves.html");
+registerPageRoute(["/kev", "/exploit-watch"], "kev.html");
+registerPageRoute(["/forecast", "/weather"], "forecast.html");
 
 app.get("/api/cves", apiLimiter, async (_req, res) => {
   try {
