@@ -1,6 +1,6 @@
 # CyberPulse News Radar
 
-Multi-page cybersecurity intelligence site with a dashboard, threat intel feed, and a recent CVE tracker backed by SQLite and live APIs.
+Multi-page cybersecurity intelligence site with a dashboard, threat intel feed, and live vulnerability views built for Cloudflare Workers + D1.
 
 ## Sources
 
@@ -15,22 +15,23 @@ Multi-page cybersecurity intelligence site with a dashboard, threat intel feed, 
 
 ## Stack
 
-- Node.js + Express API
-- SQLite via better-sqlite3
-- RSS ingestion via rss-parser
+- Cloudflare Workers for API routes and page delivery
+- Cloudflare D1 for persistent article storage
+- Node.js local wrapper for development parity
+- RSS and Atom ingestion via `fast-xml-parser`
 - Static frontend (vanilla JS/CSS)
 
 ## Features
 
 - Fast feed aggregation from trusted sources
-- Historical archive (all ingested stories persist in `data/news.db`)
+- Historical archive stored in D1
 - Filter by source and date range
-- Daily archive pulse for last 30 days
+- Daily archive pulse for the last 30 days
 - Embedded live threat map widget from Kaspersky
-- Multi-page navigation with a dashboard, threat intel page, and CVE page
-- Manual refresh button + automatic background refresh every 30 minutes
+- Multi-page navigation with dashboard, threat intel, CVE, KEV, and forecast views
+- Manual refresh button plus automatic background refresh every 30 minutes
 
-## Run
+## Local Run
 
 ```bash
 npm install
@@ -39,45 +40,19 @@ npm start
 
 Open: `http://localhost:4000`
 
+## Cloudflare Deploy
+
+1. Create a D1 database and put the database ID into `wrangler.toml`.
+2. Apply the schema from `migrations/0001_init.sql`.
+3. Run `npm run cf:dev` for local Worker emulation or `npm run deploy` for Cloudflare deployment.
+
 ## Pages
 
-- `http://localhost:4000/` - Dashboard
-- `http://localhost:4000/threat-intel` - Threat intel feed and map
-- `http://localhost:4000/cves` - Recent CVEs and vulnerabilities
-- `http://localhost:4000/kev` - Known exploited vulnerabilities / exploit watch
-- `http://localhost:4000/forecast` - Cyber weather forecast and anticipated threats
-
-## Easy start/stop commands
-
-Run the app in the background as a local service:
-
-```bash
-npm run start:service
-```
-
-Stop it:
-
-```bash
-npm run stop:service
-```
-
-Check status:
-
-```bash
-npm run status:service
-```
-
-Restart it:
-
-```bash
-npm run restart:service
-```
-
-Watch logs:
-
-```bash
-npm run logs:service
-```
+- `/dashboard` - Dashboard
+- `/threat-intel` - Threat intel feed and map
+- `/cves` - Recent CVEs and vulnerabilities
+- `/kev` - Known exploited vulnerabilities / exploit watch
+- `/forecast` - Cyber weather forecast and anticipated threats
 
 ## Manual ingestion
 
@@ -104,7 +79,8 @@ The KEV page pulls CISA's Known Exploited Vulnerabilities feed, scopes to entrie
 
 ## Notes
 
-- This app uses RSS feeds and stores snapshots for historical browsing.
+- This app uses RSS and Atom feeds and stores snapshots for historical browsing.
 - If a source changes feed format or URL, update `src/sources.js`.
+- The root `public/index.html` now redirects to `/dashboard`.
 
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-dark.svg)](https://sonarcloud.io/summary/new_code?id=kab00038_Cyber-Pulse)

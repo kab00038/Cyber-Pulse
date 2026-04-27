@@ -6,7 +6,7 @@
     <title>CyberPulse - Threat Intel Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" integrity="sha384-w0cgLw3Vy9Gkxgd3r8G7lHNZBKR2+WJ3wH0eH8jFEYX2v5VWDCnKXpN/cGkuARpJ" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" crossorigin="anonymous" />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body data-page="dashboard">
@@ -15,8 +15,10 @@
       <a class="brand" href="/dashboard">CyberPulse</a>
       <nav class="topnav">
         <a href="/dashboard" aria-current="page">Dashboard</a>
+        <a href="/threat-intel">Threat Intel</a>
+        <a href="/cves">CVEs</a>
+        <a href="/kev">Exploit Watch</a>
         <a href="/forecast">Forecast</a>
-        <a href="/statistics">Statistics</a>
       </nav>
       <div class="topbar-actions">
         <span class="topbar-chip">LIVE</span>
@@ -25,174 +27,85 @@
     </header>
 
     <main class="page-shell">
-      <!-- Tab Navigation -->
-      <div class="tab-navigation">
-        <button class="tab-button active" data-tab="overview">Command View</button>
-        <button class="tab-button" data-tab="intel">Threat Watch</button>
-      </div>
+      <section class="panel page-hero dashboard-hero">
+        <div>
+          <p class="kicker">SHADOW / SURFACE MONITORING</p>
+          <h1>Cyber Threat Dashboard</h1>
+          <p class="subtitle">A compact command view for current activity, archive depth, source coverage, and the latest high-signal reporting.</p>
+        </div>
+        <div class="hero-search">
+          <label for="searchInput">Search intelligence</label>
+          <input id="searchInput" type="search" placeholder="Search titles, sources, or themes" />
+        </div>
+      </section>
 
-      <!-- OVERVIEW TAB -->
-      <div id="overview" class="tab-content active">
-        <section class="hero-panel panel dashboard-hero">
-          <div>
-            <p class="kicker">SHADOW / SURFACE MONITORING</p>
-            <h1>Cyber Threat Dashboard</h1>
-            <p class="subtitle">A compact command-view for current activity, archive depth, source coverage, and recent high-signal reporting.</p>
-          </div>
-          <div class="hero-search">
-            <label for="searchInput">Search intelligence</label>
-            <input id="searchInput" type="search" placeholder="Search titles, sources, or themes" />
-          </div>
+      <section class="dashboard-grid">
+        <section class="panel metric-panel">
+          <span class="metric-label">Active sources</span>
+          <strong id="metricSources" class="metric-value">--</strong>
+          <span class="metric-note">Tracked feeds in archive</span>
         </section>
-
-        <section class="dashboard-grid">
-          <section class="panel metric-panel">
-            <span class="metric-label">Active sources</span>
-            <strong id="metricSources" class="metric-value">--</strong>
-            <span class="metric-note">Tracked feeds in archive</span>
-          </section>
-          <section class="panel metric-panel">
-            <span class="metric-label">Archive days</span>
-            <strong id="metricDays" class="metric-value">--</strong>
-            <span class="metric-note">Unique daily buckets</span>
-          </section>
-          <section class="panel metric-panel">
-            <span class="metric-label">Recent stories</span>
-            <strong id="metricStories" class="metric-value">--</strong>
-            <span class="metric-note">Latest live articles loaded</span>
-          </section>
-          <section class="panel metric-panel">
-            <span class="metric-label">UTC clock</span>
-            <strong id="utcClock" class="metric-value">--:--:--</strong>
-            <span class="metric-note">Synchronised time</span>
-          </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">Archive days</span>
+          <strong id="metricDays" class="metric-value">--</strong>
+          <span class="metric-note">Unique daily buckets</span>
         </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">Recent stories</span>
+          <strong id="metricStories" class="metric-value">--</strong>
+          <span class="metric-note">Latest live articles loaded</span>
+        </section>
+        <section class="panel metric-panel">
+          <span class="metric-label">UTC clock</span>
+          <strong id="utcClock" class="metric-value">--:--:--</strong>
+          <span class="metric-note">Synchronised time</span>
+        </section>
+      </section>
 
-        <section class="dashboard-grid dashboard-grid-wide">
-          <section class="panel dashboard-card">
-            <div class="section-header">
-              <div>
-                <p class="kicker">Coverage</p>
-                <h2>Source Distribution</h2>
-              </div>
-              <span class="section-badge">Archive mix</span>
+      <section class="dashboard-grid dashboard-grid-wide">
+        <section class="panel dashboard-card">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Coverage</p>
+              <h2>Source Distribution</h2>
             </div>
-            <div id="sourceBars" class="bar-list"></div>
-          </section>
-
-          <section class="panel dashboard-card">
-            <div class="section-header">
-              <div>
-                <p class="kicker">Burst</p>
-                <h2>Daily Activity</h2>
-              </div>
-              <span class="section-badge">30 day view</span>
-            </div>
-            <div id="dayBars" class="bar-list bar-list-dense"></div>
-          </section>
+            <span class="section-badge">Archive mix</span>
+          </div>
+          <div id="sourceBars" class="bar-list"></div>
         </section>
 
         <section class="panel dashboard-card">
           <div class="section-header">
             <div>
-              <p class="kicker">Intel</p>
-              <h2>Recent high-signal reports</h2>
+              <p class="kicker">Burst</p>
+              <h2>Daily Activity</h2>
             </div>
-            <span class="section-badge" id="dashboardStatus">Loading...</span>
+            <span class="section-badge">30 day view</span>
           </div>
-          <div id="dashboardFeed" class="dashboard-feed"></div>
+          <div id="dayBars" class="bar-list bar-list-dense"></div>
         </section>
-      </div>
+      </section>
 
-      <!-- THREAT WATCH TAB -->
-      <div id="intel" class="tab-content">
-        <section class="panel page-hero">
+      <section class="panel dashboard-card dashboard-highlight">
+        <div class="section-header">
           <div>
-            <p class="kicker">CYBERPULSE / OPEN SOURCE INTEL DESK</p>
-            <h1>Threat Watch Console</h1>
-            <p class="subtitle">Trusted cybersecurity headlines, archived daily for historical analysis.</p>
+            <p class="kicker">Intel</p>
+            <h2>Recent high-signal reports</h2>
           </div>
-          <div class="intel-strip" aria-label="Live operational status">
-            <div class="strip-item">
-              <span class="strip-label">Feed</span>
-              <strong>LIVE</strong>
-            </div>
-            <div class="strip-item">
-              <span class="strip-label">Sources</span>
-              <strong id="sourceCount">0</strong>
-            </div>
-            <div class="strip-item">
-              <span class="strip-label">Archive</span>
-              <strong id="dayCount">0 days</strong>
-            </div>
-            <div class="strip-item">
-              <span class="strip-label">UTC</span>
-              <strong id="intelUtcClock">--:--:--</strong>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel threat-watch-panel">
-          <div class="section-header">
-            <div>
-              <p class="kicker">Filters</p>
-              <h2>Archive query</h2>
-            </div>
-          </div>
-          <div class="filter-controls">
-            <div class="filter-group">
-              <label for="sourceFilter">Source</label>
-              <select id="sourceFilter">
-                <option value="">All sources</option>
-              </select>
-            </div>
-            <div class="filter-group">
-              <label for="fromDate">From date</label>
-              <input id="fromDate" type="date" />
-            </div>
-            <div class="filter-group">
-              <label for="toDate">To date</label>
-              <input id="toDate" type="date" />
-            </div>
-            <button id="applyFilters" class="apply-filters-btn">Apply filters</button>
-          </div>
-        </section>
-
-        <section class="panel threat-watch-panel">
-          <div class="section-header">
-            <div>
-              <p class="kicker">Feed</p>
-              <h2>Archived articles</h2>
-            </div>
-            <span class="section-badge" id="statusText">Loading...</span>
-          </div>
-          <div id="newsGrid" class="news-grid"></div>
-        </section>
-
-        <section class="panel threat-watch-panel">
-          <div class="section-header">
-            <div>
-              <p class="kicker">Breakdown</p>
-              <h2>Daily distribution</h2>
-            </div>
-          </div>
-          <div id="dailyBreakdown" class="daily-breakdown"></div>
-        </section>
-      </div>
-    </main>
-
-    <!-- Templates for Dashboard -->
-    <template id="cardTemplate">
-      <article class="news-card">
-        <div class="card-header">
-          <span class="source-pill"></span>
-          <time></time>
+          <span class="section-badge" id="dashboardStatus">Loading...</span>
         </div>
-        <h3></h3>
-        <p></p>
-        <a target="_blank" rel="noopener noreferrer" class="read-link">Read full article</a>
-      </article>
-    </template>
+        <div id="dashboardFeed" class="dashboard-feed"></div>
+      </section>
+
+      <section class="panel dashboard-card dashboard-callout">
+        <div>
+          <p class="kicker">Live map</p>
+          <h2>Open the threat-intel console for the map and filters</h2>
+          <p class="subtitle">The dedicated threat-intel page keeps the map isolated so the dashboard stays quick to load on mobile connections.</p>
+        </div>
+        <a class="cta-link" href="/threat-intel">Open threat-intel</a>
+      </section>
+    </main>
 
     <template id="dashboardCardTemplate">
       <article class="dashboard-feed-card">

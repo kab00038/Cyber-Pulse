@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node src/server.js",
-    "ingest": "node src/ingest.js",
+    "ingest": "node src/ingest-local.js",
+    "deploy": "npx wrangler deploy",
+    "cf:dev": "npx wrangler dev",
     "start:service": "node scripts/service.mjs start",
     "stop:service": "node scripts/service.mjs stop",
     "restart:service": "node scripts/service.mjs restart",
@@ -15,8 +17,6 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.1.5",
-    "rss-parser": "^3.13.0"
+    "fast-xml-parser": "^4.5.6"
   }
 }

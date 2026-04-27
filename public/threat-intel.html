@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - Threat Intel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="threat-intel">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/threat-intel" aria-current="page">Threat Intel</a>
+        <a href="/cves">CVEs</a>
+        <a href="/kev">Exploit Watch</a>
+        <a href="/forecast">Forecast</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshButton" class="refresh-btn">Refresh Sources</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="panel page-hero">
+        <div>
+          <p class="kicker">CYBERPULSE / OPEN SOURCE INTEL DESK</p>
+          <h1>Threat Watch Console</h1>
+          <p class="subtitle">Trusted cybersecurity headlines, archived daily for historical analysis.</p>
+        </div>
+        <div class="intel-strip" aria-label="Live operational status">
+          <div class="strip-item">
+            <span class="strip-label">Feed</span>
+            <strong>LIVE</strong>
+          </div>
+          <div class="strip-item">
+            <span class="strip-label">Sources</span>
+            <strong id="sourceCount">0</strong>
+          </div>
+          <div class="strip-item">
+            <span class="strip-label">Archive</span>
+            <strong id="dayCount">0 days</strong>
+          </div>
+          <div class="strip-item">
+            <span class="strip-label">UTC</span>
+            <strong id="utcClock">--:--:--</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="layout">
+        <aside class="sidebar panel">
+          <h2>Filter Feed</h2>
+          <label for="sourceFilter">Source</label>
+          <select id="sourceFilter">
+            <option value="">All sources</option>
+          </select>
+
+          <label for="fromDate">From</label>
+          <input id="fromDate" type="date" />
+
+          <label for="toDate">To</label>
+          <input id="toDate" type="date" />
+
+          <button id="applyFilters" class="apply-btn">Apply Filters</button>
+
+          <section class="archive-section">
+            <h3>Archive Pulse (30 days)</h3>
+            <ul id="dailyBreakdown" class="meta-list"></ul>
+          </section>
+        </aside>
+
+        <section class="content panel">
+          <div class="content-split">
+            <section class="widget-panel split-panel">
+              <div class="content-header widget-header">
+                <div>
+                  <h2>Live Threat Map</h2>
+                  <p class="widget-note">Embedded from Kaspersky for a real-time global attack view.</p>
+                </div>
+                <button class="map-load-btn" type="button" data-map-load>Load live map</button>
+              </div>
+              <div class="widget-frame-shell">
+                <iframe class="threat-map-frame" width="640" height="640" data-map-src="https://cybermap.kaspersky.com/en/widget/dynamic/dark" title="Kaspersky CyberMap threat intelligence widget" loading="lazy" referrerpolicy="no-referrer" src="about:blank"></iframe>
+              </div>
+            </section>
+
+            <section class="split-panel intelligence-panel">
+              <div class="content-header">
+                <h2>Latest Intelligence</h2>
+                <span id="statusText">Loading...</span>
+              </div>
+              <div id="newsGrid" class="news-grid"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="cardTemplate">
+      <article class="news-card">
+        <div class="card-head">
+          <span class="source-pill"></span>
+          <time></time>
+        </div>
+        <h3></h3>
+        <p></p>
+        <a target="_blank" rel="noopener noreferrer">Read full report</a>
+      </article>
+    </template>
+
+    <script src="/main.js" type="module"></script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-import db from "./db.js";
+import { fetchRecentNews } from "./data-store.js";
 import { fetchRecentCves } from "./cves.js";
 import { fetchKevWatch } from "./kev.js";
 
@@ -33,14 +33,6 @@ const THREAT_PATTERNS = [
   { key: "cloud", label: "Cloud Control Plane Risk", regex: /aws|azure|gcp|cloud|iam|tenant/i },
   { key: "ics-ot", label: "ICS and OT Exposure", regex: /scada|ics|ot|industrial|plc|modbus/i }
 ];
-
-const recentNewsStmt = db.prepare(`
-  SELECT source, title, summary, published_at AS publishedAt
-  FROM articles
-  WHERE datetime(published_at) >= datetime('now', '-${HOURS_WINDOW} hours')
-  ORDER BY datetime(published_at) DESC
-  LIMIT 400
-`);
 
 function compact(text) {
   return String(text || "").replaceAll(/\s+/g, " ").trim();
@@ -119,8 +111,12 @@ function buildThreatOutlook(newsItems, kev, cves) {
   }).sort((a, b) => b.score - a.score);
 }
 
-export async function fetchForecast() {
-  const newsItems = recentNewsStmt.all().map((item) => ({
+export async function fetchForecast(store) {
+  if (!store) {
+    throw new Error("fetchForecast requires a database store");
+  }
+
+  const newsItems = (await fetchRecentNews(store, HOURS_WINDOW)).map((item) => ({
     source: compact(item.source),
     title: compact(item.title),
     summary: compact(item.summary),
