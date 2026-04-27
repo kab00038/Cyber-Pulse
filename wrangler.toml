@@ -7,7 +7,7 @@ assets = { directory = "./public", binding = "ASSETS" }
 [[d1_databases]]
 binding = "DB"
 database_name = "cyberpulse"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "1609a7fa-1aae-4481-b843-427e370bb03e"
 
 [triggers]
 crons = ["*/30 * * * *"]

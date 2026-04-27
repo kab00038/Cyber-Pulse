@@ -1,5 +1,5 @@
-export const ARTICLE_SCHEMA_SQL = `
-  CREATE TABLE IF NOT EXISTS articles (
+export const ARTICLE_SCHEMA_STATEMENTS = [
+  `CREATE TABLE IF NOT EXISTS articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     source TEXT NOT NULL,
     title TEXT NOT NULL,
@@ -7,11 +7,10 @@ export const ARTICLE_SCHEMA_SQL = `
     summary TEXT,
     published_at TEXT,
     ingested_at TEXT NOT NULL
-  );
-
-  CREATE INDEX IF NOT EXISTS idx_articles_published_at ON articles(published_at DESC);
-  CREATE INDEX IF NOT EXISTS idx_articles_source ON articles(source);
-`;
+  )`,
+  "CREATE INDEX IF NOT EXISTS idx_articles_published_at ON articles(published_at DESC)",
+  "CREATE INDEX IF NOT EXISTS idx_articles_source ON articles(source)"
+];
 
 const NEWS_COLUMNS = `id, source, title, link, summary, published_at AS publishedAt, ingested_at AS ingestedAt`;
 
@@ -42,9 +41,8 @@ async function callStatement(db, method, sql, params = {}) {
 }
 
 export async function ensureArticlesSchema(db) {
-  const result = db.exec(ARTICLE_SCHEMA_SQL);
-  if (isPromise(result)) {
-    await result;
+  for (const statement of ARTICLE_SCHEMA_STATEMENTS) {
+    await queryRun(db, statement);
   }
 }
 

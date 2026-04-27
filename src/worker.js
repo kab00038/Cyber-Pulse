@@ -70,6 +70,11 @@ async function ensureSchemaOnce(env) {
 
 async function handleApi(request, env) {
   const url = new URL(request.url);
+  const isApiRoute = url.pathname.startsWith("/api/");
+
+  if (!isApiRoute) {
+    return null;
+  }
 
   if (request.method === "OPTIONS") {
     return json({ ok: true });
@@ -139,13 +144,22 @@ async function handleApi(request, env) {
 
 export default {
   async fetch(request, env, ctx) {
-    const apiResponse = await handleApi(request, env);
-    if (apiResponse) return apiResponse;
+    try {
+      const apiResponse = await handleApi(request, env);
+      if (apiResponse) return apiResponse;
 
-    const staticResponse = routeStaticRequest(request, env);
-    if (staticResponse) return staticResponse;
+      const staticResponse = routeStaticRequest(request, env);
+      if (staticResponse) return staticResponse;
 
-    return json({ error: "Not found" }, { status: 404 });
+      return json({ error: "Not found" }, { status: 404 });
+    } catch (error) {
+      console.error("Worker request failure", {
+        method: request.method,
+        url: request.url,
+        message: String(error?.message || error)
+      });
+      return json({ error: "Internal Server Error" }, { status: 500 });
+    }
   },
 
   async scheduled(_event, env, ctx) {
