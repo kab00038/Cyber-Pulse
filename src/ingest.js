@@ -7,11 +7,48 @@ const parser = new XMLParser({
   attributeNamePrefix: "@_",
   allowBooleanAttributes: true,
   trimValues: true,
-  processEntities: true
+  processEntities: false
 });
 
+const ENTITY_MAP = {
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  nbsp: " "
+};
+
+function decodeHtmlEntities(input = "") {
+  return String(input || "").replaceAll(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, (match, token) => {
+    if (!token) return match;
+
+    if (token[0] === "#") {
+      const raw = token.slice(1);
+      const isHex = raw[0]?.toLowerCase() === "x";
+      const codePoint = Number.parseInt(isHex ? raw.slice(1) : raw, isHex ? 16 : 10);
+      if (!Number.isFinite(codePoint) || codePoint <= 0) return match;
+
+      try {
+        return String.fromCodePoint(codePoint);
+      } catch {
+        return match;
+      }
+    }
+
+    const key = token.toLowerCase();
+    return Object.hasOwn(ENTITY_MAP, key) ? ENTITY_MAP[key] : match;
+  });
+}
+
 function cleanText(input = "") {
-  return String(input || "").replaceAll(/<[^<>]*>/g, " ").replaceAll(/\s+/g, " ").trim();
+  let text = String(input || "");
+
+  // Handle double-encoded feed content like &amp;lt;p&amp;gt; by decoding twice.
+  text = decodeHtmlEntities(decodeHtmlEntities(text));
+  text = text.replaceAll(/<[^<>]*>/g, " ");
+  text = text.replaceAll(/\s+/g, " ").trim();
+  return text;
 }
 
 function asArray(value) {

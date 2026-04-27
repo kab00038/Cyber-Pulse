@@ -18,6 +18,20 @@ function isPromise(value) {
   return Boolean(value) && typeof value.then === "function";
 }
 
+function isD1Database(db) {
+  return Boolean(db) && typeof db.batch === "function";
+}
+
+function toD1Positional(sql, params = {}) {
+  const values = [];
+  const positionalSql = sql.replace(/@([A-Za-z0-9_]+)/g, (_match, key) => {
+    values.push(params[key]);
+    return "?";
+  });
+
+  return { positionalSql, values };
+}
+
 export function normalizeRows(result) {
   if (Array.isArray(result)) return result;
   if (Array.isArray(result?.results)) return result.results;
@@ -35,6 +49,13 @@ export function normalizeChanges(result) {
 }
 
 async function callStatement(db, method, sql, params = {}) {
+  if (isD1Database(db)) {
+    const { positionalSql, values } = toD1Positional(sql, params);
+    const statement = db.prepare(positionalSql).bind(...values);
+    const result = statement[method]();
+    return isPromise(result) ? await result : result;
+  }
+
   const statement = db.prepare(sql);
   const result = statement[method](params);
   return isPromise(result) ? await result : result;
@@ -59,9 +80,47 @@ export async function queryRun(db, sql, params = {}) {
 }
 
 export async function insertArticles(db, articles = []) {
+  if (isD1Database(db)) {
+    const statement = db.prepare(`
+      INSERT INTO articles (source, title, link, summary, published_at, ingested_at)
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT(link) DO UPDATE SET
+        source = excluded.source,
+        title = excluded.title,
+        summary = excluded.summary,
+        published_at = excluded.published_at,
+        ingested_at = excluded.ingested_at
+    `);
+
+    let inserted = 0;
+
+    for (const article of articles) {
+      const result = await statement
+        .bind(
+          article.source,
+          article.title,
+          article.link,
+          article.summary,
+          article.published_at,
+          article.ingested_at
+        )
+        .run();
+      const changes = normalizeChanges(result);
+      inserted += changes > 0 ? changes : 0;
+    }
+
+    return inserted;
+  }
+
   const statement = db.prepare(`
-    INSERT OR IGNORE INTO articles (source, title, link, summary, published_at, ingested_at)
+    INSERT INTO articles (source, title, link, summary, published_at, ingested_at)
     VALUES (@source, @title, @link, @summary, @published_at, @ingested_at)
+    ON CONFLICT(link) DO UPDATE SET
+      source = excluded.source,
+      title = excluded.title,
+      summary = excluded.summary,
+      published_at = excluded.published_at,
+      ingested_at = excluded.ingested_at
   `);
 
   let inserted = 0;
