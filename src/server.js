@@ -196,10 +196,13 @@ app.post("/api/refresh", refreshLimiter, async (req, res) => {
 });
 
 registerPageRoute(["/", "/dashboard"], "dashboard.html");
-registerPageRoute(["/threat-intel", "/intel"], "index.html");
-registerPageRoute(["/cves", "/vulnerabilities"], "cves.html");
-registerPageRoute(["/kev", "/exploit-watch"], "kev.html");
 registerPageRoute(["/forecast", "/weather"], "forecast.html");
+registerPageRoute(["/statistics", "/vulnerabilities", "/cves", "/kev", "/exploit-watch"], "statistics.html");
+
+// Redirect old threat-intel path to dashboard
+app.get(["/threat-intel", "/intel"], (_req, res) => {
+  res.redirect("/dashboard");
+});
 
 app.get("/api/cves", apiLimiter, async (_req, res) => {
   try {

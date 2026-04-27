@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>CyberPulse - Vulnerability Statistics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" integrity="sha384-w0cgLw3Vy9Gkxgd3r8G7lHNZBKR2+WJ3wH0eH8jFEYX2v5VWDCnKXpN/cGkuARpJ" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-page="statistics">
+    <div class="bg-grid"></div>
+    <header class="topbar">
+      <a class="brand" href="/dashboard">CyberPulse</a>
+      <nav class="topnav">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/forecast">Forecast</a>
+        <a href="/statistics" aria-current="page">Statistics</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="topbar-chip">LIVE</span>
+        <button id="refreshButton" class="refresh-btn">Refresh Data</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="cves">Critical CVEs</button>
+        <button class="tab-button" data-tab="kev">Known Exploits</button>
+      </div>
+
+      <!-- CVEs TAB -->
+      <div id="cves" class="tab-content active">
+        <section class="panel page-hero">
+          <div>
+            <p class="kicker">VULNERABILITY WATCH</p>
+            <h1>Recent Critical CVEs</h1>
+            <p class="subtitle">Top recent vulnerabilities ranked by severity and affected scope. The score emphasizes criticality and breadth of vulnerable products.</p>
+          </div>
+          <div class="cve-summary-strip">
+            <div class="summary-chip">
+              <span>Window</span>
+              <strong>Last 14 days</strong>
+            </div>
+            <div class="summary-chip">
+              <span>Source</span>
+              <strong>NVD API</strong>
+            </div>
+            <div class="summary-chip">
+              <span>Sorted by</span>
+              <strong>Impact score</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel cve-panel">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Criticality</p>
+              <h2>Top 10 vulnerabilities</h2>
+            </div>
+            <span class="section-badge" id="cveStatus">Loading...</span>
+          </div>
+          <div id="cveList" class="cve-list"></div>
+        </section>
+      </div>
+
+      <!-- KEV TAB -->
+      <div id="kev" class="tab-content">
+        <section class="panel page-hero">
+          <div>
+            <p class="kicker">KNOWN EXPLOITED VULNERABILITIES</p>
+            <h1>Exploit Watch / KEV</h1>
+            <p class="subtitle">A focused view of vulnerabilities confirmed as actively exploited, scoped to this year and last year with due dates that are upcoming or recently overdue.</p>
+          </div>
+          <div class="cve-summary-strip">
+            <div class="summary-chip">
+              <span>Total KEV</span>
+              <strong id="kevTotal">--</strong>
+            </div>
+            <div class="summary-chip">
+              <span>Overdue</span>
+              <strong id="kevOverdue">--</strong>
+            </div>
+            <div class="summary-chip">
+              <span>Due in 30d</span>
+              <strong id="kevDueSoon">--</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel kev-panel">
+          <div class="section-header">
+            <div>
+              <p class="kicker">Exploit pressure</p>
+              <h2>Top KEV items</h2>
+            </div>
+            <span class="section-badge" id="kevStatus">Loading...</span>
+          </div>
+          <div id="kevList" class="kev-list"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- CVE Template -->
+    <template id="cveTemplate">
+      <article class="cve-card">
+        <div class="cve-head">
+          <div>
+            <span class="cve-id"></span>
+            <h3></h3>
+          </div>
+          <span class="severity-pill"></span>
+        </div>
+        <p class="cve-summary"></p>
+        <div class="cve-meta">
+          <span class="cve-score"></span>
+          <span class="cve-affected"></span>
+          <span class="cve-date"></span>
+        </div>
+        <button class="framework-btn" type="button">Map to OWASP + MITRE</button>
+        <section class="framework-result" hidden></section>
+        <div class="cve-links"></div>
+      </article>
+    </template>
+
+    <!-- KEV Template -->
+    <template id="kevTemplate">
+      <article class="kev-card">
+        <div class="kev-head">
+          <div>
+            <span class="kev-id"></span>
+            <h3></h3>
+          </div>
+          <span class="kev-date-badge"></span>
+        </div>
+        <p class="kev-summary"></p>
+        <div class="kev-meta">
+          <span class="kev-due"></span>
+          <span class="kev-products"></span>
+        </div>
+        <div class="kev-links"></div>
+      </article>
+    </template>
+
+    <script src="/statistics.js" type="module"></script>
+  </body>
+</html>
